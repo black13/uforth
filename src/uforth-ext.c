@@ -9,11 +9,13 @@
 */
 char* i32toa(int32_t value, char* str, int32_t base);
 
-void c_ext_init(void) { 
+void c_ext_init(void)
+{
 }
 
 /* No additional commands to register */
-void c_ext_create_cmds(void) {
+void c_ext_create_cmds(void)
+{
 }
 
 /*
@@ -27,38 +29,40 @@ void c_ext_create_cmds(void) {
   make more sense when browsed within the context of a calling script!
   
 */
-uforth_stat c_ext_handle_cmds(CELL n) {
-  CELL r1, r2,r3;		/* NOTE: THESE ARE 16 bit values! */
-  char *str1;
+uforth_stat c_ext_handle_cmds(CELL n)
+{
+	CELL r1, r2,r3;		/* NOTE: THESE ARE 16 bit values! */
+	char *str1;
 
-  switch (n) {
-  case UF_INTERP:		/* recursively call the uforth interpreter */
-    r1 = dpop();
-    str1 = uforth_count_str(r1,&r1);
-    str1[r1] = '\0';
-    dpush(uforth_interpret(str1));
-    break;
-  case UF_SUBSTR:		/* return a substring of the uForth string */
-    r1 = dpop();		/* addr */
-    r2 = dpop();		/* length */
-    r3 = dpop();		/* start */
-    str1 = uforth_count_str(r1,&r1);
-    if (r1 < r2) r2 = r1;
-    PAD_STRLEN = r2;
-    memcpy(PAD_STR, str1 + r3, r2);
-    dpush(RAM_START_IDX+PAD_ADDR);
-    break;
-  case UF_NUM_TO_STR:			/* 32bit to string */
-    {
-      char num[12];
-      i32toa(dpop32(),num,uforth_uram->base);
-      PAD_STRLEN=strlen(num);
-      memcpy(PAD_STR, num, PAD_SIZE);
-      dpush(RAM_START_IDX+PAD_ADDR);
-    }
-    break;
-  default:
-    return E_ABORT;
-  }
-  return OK;
+	switch (n)
+	{
+		case UF_INTERP:		/* recursively call the uforth interpreter */
+			r1 = dpop();
+			str1 = uforth_count_str(r1,&r1);
+			str1[r1] = '\0';
+			dpush(uforth_interpret(str1));
+			break;
+		case UF_SUBSTR:		/* return a substring of the uForth string */
+			r1 = dpop();		/* addr */
+			r2 = dpop();		/* length */
+			r3 = dpop();		/* start */
+			str1 = uforth_count_str(r1,&r1);
+			if (r1 < r2) r2 = r1;
+			PAD_STRLEN = r2;
+			memcpy(PAD_STR, str1 + r3, r2);
+			dpush(RAM_START_IDX+PAD_ADDR);
+			break;
+		case UF_NUM_TO_STR:			/* 32bit to string */
+		{
+			char num[12];
+			i32toa(dpop32(),num,uforth_uram->base);
+			PAD_STRLEN=strlen(num);
+			memcpy(PAD_STR, num, PAD_SIZE);
+			dpush(RAM_START_IDX+PAD_ADDR);
+		}
+		break;
+		default:
+			return E_ABORT;
+	}
+	return OK;
 }
