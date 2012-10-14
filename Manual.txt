@@ -1,0 +1,4 @@
+This manual will try to describe the words present in the core language, that is the language
+implemented in C.
+
+Stack Manipulation:
