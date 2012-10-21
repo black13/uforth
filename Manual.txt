@@ -2,3 +2,8 @@ This manual will try to describe the words present in the core language, that is
 implemented in C.
 
 Stack Manipulation:
+negate:  ( n1 -- n2 )
+Negate n1, giving its arithmetic inverse n2.
+  
+1+: add 1 to top stack element ( n1|u1 -- n2|u2 )
+Add one (1) to n1|u1 giving the sum n2|u2. 
